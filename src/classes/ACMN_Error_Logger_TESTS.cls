@@ -7,6 +7,7 @@ private class ACMN_Error_Logger_TESTS {
 
     @IsTest
     static void testEventTrigger() {
+        System.debug(ACMN_Error_Logger.settings);
         ACMN_Error_Log_PE__e pe = new ACMN_Error_Log_pe__e();
         pe.Error_Message__c = 'testEventTrigger';
         pe.Class_Name__c = 'ACMN_Error_Logger_TESTS';
@@ -69,6 +70,24 @@ private class ACMN_Error_Logger_TESTS {
         Test.stopTest();
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
         System.assertEquals(0, logs.size());
+    }
+
+    @IsTest
+    static void testEventLoggerDisabled() {
+        ACMN_Error_Logger.settings.Enabled = false;
+        Test.startTest();
+        ACMN_Error_Logger.Log('Testing disabled logger');
+        Test.stopTest();
+        List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
+        System.assertEquals(0, logs.size());
+    }
+
+    @IsTest
+    static void testEventPEDisabled() {
+        ACMN_Error_Logger.settings.UsePE = false;
+        ACMN_Error_Logger.Log('Testing disabled logger');
+        List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
+        System.assertEquals(1, logs.size());
     }
 
     class CustomException extends Exception {
