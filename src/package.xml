@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>ACMN_Error_Logger</members>
+        <members>ACMN_Error_Logger_TESTS</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>ACMN_Log_Error</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>ACMN_Error_Log_PE__e.Class_Name__c</members>
+        <members>ACMN_Error_Log_PE__e.Error_Message__c</members>
+        <members>ACMN_Error_Log_PE__e.Log_Date_Time__c</members>
+        <members>ACMN_Error_Log_PE__e.Other_Details__c</members>
+        <members>ACMN_Error_Log__c.Class_Name__c</members>
+        <members>ACMN_Error_Log__c.Error_Message__c</members>
+        <members>ACMN_Error_Log__c.Log_Date_Time__c</members>
+        <members>ACMN_Error_Log__c.Other_Details__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>ACMN_Error_Log_PE__e</members>
+        <members>ACMN_Error_Log__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>ACMN_Error_Log__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>ACMN_Error_Log__c-ACMN Error Log Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>ACMN_Error_Log__c.All</members>
+        <name>ListView</name>
+    </types>
+    <types>
+        <members>ACMN_Error_Log__c</members>
+        <name>SharingRules</name>
+    </types>
+    <version>43.0</version>
+</Package>

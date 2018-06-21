@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Used to store error logs outside of debug</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>false</enableBulkApi>
+    <enableChangeDataCapture>false</enableChangeDataCapture>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>false</enableSharing>
+    <enableStreamingApi>false</enableStreamingApi>
+    <externalSharingModel>ReadWrite</externalSharingModel>
+    <fields>
+        <fullName>Class_Name__c</fullName>
+        <description>Stores the Apex Class name if applicable</description>
+        <encrypted>false</encrypted>
+        <externalId>false</externalId>
+        <label>Class Name</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Error_Message__c</fullName>
+        <description>Stores the error message and/or stack trace</description>
+        <encrypted>false</encrypted>
+        <externalId>false</externalId>
+        <label>Error Message</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Log_Date_Time__c</fullName>
+        <defaultValue>NOW()</defaultValue>
+        <description>Exact date time the error occured</description>
+        <encrypted>false</encrypted>
+        <externalId>false</externalId>
+        <label>Log Date Time</label>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Other_Details__c</fullName>
+        <description>Store any additional information if applicable.  Examples: Detailed stack trace, API Endpoint URI, etc.</description>
+        <encrypted>false</encrypted>
+        <externalId>false</externalId>
+        <label>Other Details</label>
+        <length>131072</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <label>ACMN Error Log</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Class_Name__c</columns>
+        <columns>Error_Message__c</columns>
+        <columns>Log_Date_Time__c</columns>
+        <columns>Other_Details__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>err-{0000000}</displayFormat>
+        <label>Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>ACMN Error Logs</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Class_Name__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Error_Message__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Log_Date_Time__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Other_Details__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Class_Name__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Error_Message__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Log_Date_Time__c</lookupDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Class_Name__c</searchFilterFields>
+        <searchFilterFields>Log_Date_Time__c</searchFilterFields>
+        <searchResultsAdditionalFields>Class_Name__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Error_Message__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Log_Date_Time__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Other_Details__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>
