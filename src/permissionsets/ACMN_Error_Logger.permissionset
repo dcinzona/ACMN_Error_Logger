@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Required for field level security settings to be able to review error log details.</description>
+    <description>Required for users publishing error logs - must be assigned to users who should be logging errors</description>
     <fieldPermissions>
         <editable>false</editable>
         <field>ACMN_Error_Log__c.Class_Name__c</field>
@@ -17,18 +17,14 @@
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>ACMN Error Log Reviewer</label>
+    <label>ACMN Error Logger</label>
     <objectPermissions>
         <allowCreate>true</allowCreate>
         <allowDelete>false</allowDelete>
         <allowEdit>false</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
-        <object>ACMN_Error_Log__c</object>
-        <viewAllRecords>true</viewAllRecords>
+        <object>ACMN_Error_Log_PE__e</object>
+        <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
-    <tabSettings>
-        <tab>ACMN_Error_Log__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
 </PermissionSet>

@@ -61,7 +61,8 @@ public class ACMN_Error_Logger {
                 pe.Class_Name__c = className;
                 pe.Other_Details__c = otherDetails;
                 pe.Log_Date_Time__c = logDateTime;
-                if(ACMN_Error_Logger.UsePE){
+
+                if(ACMN_Error_Logger.UsePE && Schema.sObjectType.ACMN_Error_Log_PE__e.isCreateable()){
                     Database.SaveResult sr = EventBus.publish(pe);
                     processSaveResults(new List<Database.SaveResult>{sr});
                 } else {
@@ -73,7 +74,7 @@ public class ACMN_Error_Logger {
         //This method should only be executed by the Platform Event User (Automated Process user)
         public void saveLogs(List<ACMN_Error_Log__c> logs){
             // Insert all cases in the list.
-            if (logs.size() > 0) {
+            if (logs.size() > 0 && Schema.sObjectType.ACMN_Error_Log__c.isCreateable()) {
                 processSaveResults(Database.insert(logs,false));
             }
         }
