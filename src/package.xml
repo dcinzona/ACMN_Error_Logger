@@ -6,7 +6,7 @@
         <name>ApexClass</name>
     </types>
     <types>
-        <members>ACMN_Log_Error</members>
+        <members>ACMN_Error_Logger_PE_Trigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -51,11 +51,12 @@
         <name>ListView</name>
     </types>
     <types>
+        <members>ACMN_Error_Logger</members>
         <members>ACMN_Error_Logger_Reviewer</members>
         <name>PermissionSet</name>
     </types>
     <types>
-        <members>ACMN_Error_Log__c</members>
+        <members>ACMN_Error_Logger_PE_Trigger</members>
         <name>SharingRules</name>
     </types>
     <version>43.0</version>
