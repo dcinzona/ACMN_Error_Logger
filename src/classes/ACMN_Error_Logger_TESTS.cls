@@ -7,16 +7,16 @@ private class ACMN_Error_Logger_TESTS {
 
     @IsTest
     static void testEventTrigger() {
-        System.debug(ACMN_Error_Logger.settings);
-        ACMN_Error_Log_PE__e pe = new ACMN_Error_Log_pe__e();
+        ACMN_Error_Log_PE__e pe = new ACMN_Error_Log_PE__e();
         pe.Error_Message__c = 'testEventTrigger';
         pe.Class_Name__c = 'ACMN_Error_Logger_TESTS';
         pe.Other_Details__c = 'Other Details';
         pe.Log_Date_Time__c = System.now();
-        List<ACMN_Error_Log_PE__e> events = new List<ACMN_Error_Log_PE__e>();
+
         Test.startTest();
         Database.SaveResult sr = EventBus.publish(pe);
         Test.stopTest();
+
         System.assertEquals(true, sr.isSuccess());
         List<ACMN_Error_Log__c> logs = [SELECT Id FROM ACMN_Error_Log__c];
         System.assertEquals(1, logs.size());
@@ -42,8 +42,7 @@ private class ACMN_Error_Logger_TESTS {
         ACMN_Error_Logger.Log(null,'ACMN_Error_Logger_TESTS',null,null);
         Test.stopTest();
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
-        System.assertEquals(1, logs.size());
-        System.assertEquals(ACMN_Error_Logger.emptyMessageString, logs[0].Error_Message__c);
+        System.assertEquals(0, logs.size());
     }
 
     @IsTest
@@ -51,7 +50,8 @@ private class ACMN_Error_Logger_TESTS {
         Test.startTest();
         ACMN_Error_Log__c log = new ACMN_Error_Log__c();
         log.Error_Message__c = 'testEventLoggerSingleLogRecord';
-        ACMN_Error_Logger.Log(log);
+        ACMN_Error_Logger.LoggerCore core = new ACMN_Error_Logger.LoggerCore();
+        core.saveLogs(new List<ACMN_Error_Log__c>{log});
         Test.stopTest();
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
         System.assertEquals(1, logs.size());
@@ -66,7 +66,7 @@ private class ACMN_Error_Logger_TESTS {
         pe.Class_Name__c = 'ACMN_Error_Logger_TESTS';
         pe.Other_Details__c = 'Other Details';
         pe.Log_Date_Time__c = null;
-        ACMN_Error_Logger.Log(pe);
+        ACMN_Error_Logger.processPE(new List<ACMN_Error_Log_PE__e>{pe});
         Test.stopTest();
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
         System.assertEquals(0, logs.size());

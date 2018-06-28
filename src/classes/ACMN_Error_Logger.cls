@@ -2,113 +2,101 @@
  * Created by gtandeciarz on 6/21/18.
  */
 
-global class ACMN_Error_Logger {
+public class ACMN_Error_Logger {
 
-    @TestVisible
-    static final String emptyMessageString = 'Error log message is required but was empty';
     @TestVisible
     static ACMN_Error_Logger.AppSettings settings = new ACMN_Error_Logger.AppSettings();
+    public static Boolean Enabled {get { return settings.Enabled; } set { settings.Enabled = value; }}
+    public static Boolean UsePE {get { return settings.UsePE; } set { settings.UsePE = value; }}
 
-    global static void Log(System.Exception ex){
-        Log(ex, null);
-    }
-
-    global static void Log(System.Exception ex, String className){
-        Log(ex, className, ex.getStackTraceString());
-    }
-
-    global static void Log(System.Exception ex, String className, String otherDetails){
-        Log(ex.getMessage(),className,otherDetails,System.now());
-    }
-
-    global static void Log(String msg){
+    public static void Log(String msg){
         Log(msg,null,null,System.now());
     }
 
-    global static void Log(String msg, String className, String otherDetails, DateTime logDate){
-        ErrorPayload payload = new ErrorPayload();
-        payload.message = msg;
-        payload.className = className;
-        payload.otherDetails = otherDetails;
-        payload.logDateTime = logDate;
-        Log(payload);
+    public static void Log(System.Exception ex){
+        Log(ex, null);
     }
 
-    static void Log(ErrorPayload payload){
-        String msg = payload.message;
-        String className = payload.className;
-        String otherDetails = payload.otherDetails;
-        DateTime logDateTime = payload.logDateTime != null ? payload.logDateTime : System.Now();
-        if(String.isEmpty(msg)){
-            msg = emptyMessageString;
-            className = String.isEmpty(className) ? ACMN_Error_Logger.class.getName() : className;
-            otherDetails = 'Original Log Details: \n\n' + JSON.serialize(payload);
+    public static void Log(System.Exception ex, String className){
+        Log(ex, className, ex.getStackTraceString());
+    }
+
+    public static void Log(System.Exception ex, String className, String otherDetails){
+        Log(ex.getMessage(),className,otherDetails,System.now());
+    }
+
+    public static void Log(String msg, String className, String otherDetails, DateTime logDate){
+        ACMN_Error_Logger.LoggerCore logger = new ACMN_Error_Logger.LoggerCore();
+        logger.processPayload(msg,className,otherDetails,logDate);
+    }
+
+    // Processes the Platform Event notification from the Platform Event Trigger
+    public static void processPE(List<ACMN_Error_Log_PE__e> events){
+        List<ACMN_Error_Log__c> records = new List<ACMN_Error_Log__c>();
+        for(ACMN_Error_Log_PE__e pe : events){
+            records.add(new ACMN_Error_Log__c(
+                    Error_Message__c = pe.Error_Message__c,
+                    Class_Name__c = pe.Class_Name__c,
+                    Other_Details__c = pe.Other_Details__c,
+                    Log_Date_Time__c = pe.Log_Date_Time__c
+            ));
         }
-        //Log the error message to Salesforce Debug as well.
-        System.debug(msg);
-        ACMN_Error_Log_PE__e pe = new ACMN_Error_Log_pe__e();
-        pe.Error_Message__c = msg;
-        pe.Class_Name__c = className;
-        pe.Other_Details__c = otherDetails;
-        pe.Log_Date_Time__c = logDateTime;
-        Log(pe);
+        ACMN_Error_Logger.LoggerCore logger = new ACMN_Error_Logger.LoggerCore();
+        logger.saveLogs(records);
     }
 
-    global static void Log(ACMN_Error_Log_PE__e pe){
-        Log(new List<ACMN_Error_Log_PE__e>{pe});
-    }
-
-    global static void Log(List<ACMN_Error_Log_PE__e> events){
-
-        if(settings.UsePE == false || settings.Enabled == false){
-            //convert to standard record object for straight DML
-            List<ACMN_Error_Log__c> records = new List<ACMN_Error_Log__c>();
-            for(ACMN_Error_Log_PE__e pe : events){
-                records.add(new ACMN_Error_Log__c(
-                        Error_Message__c = pe.Error_Message__c,
-                        Class_Name__c = pe.Class_Name__c,
-                        Other_Details__c = pe.Other_Details__c,
-                        Log_Date_Time__c = pe.Log_Date_Time__c
-                ));
+    @TestVisible
+    class LoggerCore {
+        //Core Logic
+        public void processPayload(String msg, String className, String otherDetails, DateTime logDate){
+            if(String.isEmpty(msg)){
+                return;
             }
-            Log(records);
-            return;
+            DateTime logDateTime = logDate != null ? logDate : System.Now();
+            //Log the error message to Salesforce Debug as well.
+            System.debug(msg);
+            if(ACMN_Error_Logger.Enabled){
+                ACMN_Error_Log_PE__e pe = new ACMN_Error_Log_PE__e();
+                pe.Error_Message__c = msg;
+                pe.Class_Name__c = className;
+                pe.Other_Details__c = otherDetails;
+                pe.Log_Date_Time__c = logDateTime;
+                if(ACMN_Error_Logger.UsePE){
+                    Database.SaveResult sr = EventBus.publish(pe);
+                    processSaveResults(new List<Database.SaveResult>{sr});
+                } else {
+                    processPE(new List<ACMN_Error_Log_PE__e>{pe});
+                }
+            }
         }
-        // Call method to publish events
-        List<Database.SaveResult> results = EventBus.publish(events);
 
-        // Inspect publishing result for each event
-        for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully published error log event.');
-            } else {
-                for(Database.Error err : sr.getErrors()) {
-                    System.debug('Error returned: ' +
-                            err.getStatusCode() +
-                            ' - ' +
-                            err.getMessage());
+        //This method should only be executed by the Platform Event User (Automated Process user)
+        public void saveLogs(List<ACMN_Error_Log__c> logs){
+            // Insert all cases in the list.
+            if (logs.size() > 0) {
+                processSaveResults(Database.insert(logs,false));
+            }
+        }
+
+        void processSaveResults(List<Database.SaveResult> srList){
+            for(Database.SaveResult sr : srList){
+                if (sr.isSuccess()) {
+                    System.debug('Successfully published error log event.');
+                } else {
+                    for(Database.Error err : sr.getErrors()) {
+                        System.debug('Error returned: ' +
+                                err.getStatusCode() +
+                                ' - ' +
+                                err.getMessage());
+                    }
                 }
             }
         }
     }
 
-    //Used by the Platform Event Trigger but can be called manually
-    global static void Log(ACMN_Error_Log__c log){
-        Log(new List<ACMN_Error_Log__c>{log});
-    }
-
-    global static void Log(List<ACMN_Error_Log__c> logs){
-        if(settings.Enabled == false){
-            return;
-        }
-        // Insert all cases in the list.
-        if (logs.size() > 0) {
-            List<Database.SaveResult> results = Database.insert(logs,false);
-        }
-    }
 
     @TestVisible
-    class AppSettings {
+    public class AppSettings {
         public boolean Enabled {get;set;}
         public boolean UsePE {get;set;}
         public integer TrimAfterDays {get;set;}
@@ -116,24 +104,21 @@ global class ACMN_Error_Logger {
             this.Enabled = true;
             this.UsePE = true;
             this.TrimAfterDays = 30;
-            List<ACMN_Logger_Setting__mdt> logSettings = [SELECT
-                    Use_Platform_Events__c,
-                    Enabled__c,
-                    Days_To_Keep__c
-                    FROM ACMN_Logger_Setting__mdt
-                    WHERE Label = 'DEFAULT'];
-            if(logSettings.size() > 0){
-                this.Enabled = logSettings[0].Enabled__c;
-                this.UsePE = logSettings[0].Use_Platform_Events__c;
-                this.TrimAfterDays = Integer.valueOf(logSettings[0].Days_To_Keep__c);
+            try{
+                List<ACMN_Logger_Setting__mdt> logSettings = [SELECT
+                        Use_Platform_Events__c,
+                        Enabled__c,
+                        Days_To_Keep__c
+                        FROM ACMN_Logger_Setting__mdt
+                        WHERE Label = 'DEFAULT'];
+                if(logSettings.size() > 0){
+                    this.Enabled = logSettings[0].Enabled__c;
+                    this.UsePE = logSettings[0].Use_Platform_Events__c;
+                    this.TrimAfterDays = Integer.valueOf(logSettings[0].Days_To_Keep__c);
+                }
+            } catch ( Exception ex ){
+
             }
         }
-    }
-
-    global class ErrorPayload{
-        public string message {get;set;}
-        public string className {get;set;}
-        public string otherDetails {get;set;}
-        public DateTime logDateTime {get;set;}
     }
 }
