@@ -41,10 +41,11 @@ global class ACMN_Error_Logger {
         DateTime logDateTime = payload.logDateTime != null ? payload.logDateTime : System.Now();
         if(String.isEmpty(msg)){
             msg = emptyMessageString;
-            System.debug(msg);
             className = String.isEmpty(className) ? ACMN_Error_Logger.class.getName() : className;
             otherDetails = 'Original Log Details: \n\n' + JSON.serialize(payload);
         }
+        //Log the error message to Salesforce Debug as well.
+        System.debug(msg);
         ACMN_Error_Log_PE__e pe = new ACMN_Error_Log_pe__e();
         pe.Error_Message__c = msg;
         pe.Class_Name__c = className;
