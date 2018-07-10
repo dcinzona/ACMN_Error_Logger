@@ -26,6 +26,10 @@
                 <behavior>Edit</behavior>
                 <field>Other_Details__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>StackTraceString__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

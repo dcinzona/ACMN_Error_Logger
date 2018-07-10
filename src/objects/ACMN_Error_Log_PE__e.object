@@ -47,9 +47,21 @@
         <isNameField>false</isNameField>
         <isSortingDisabled>false</isSortingDisabled>
         <label>Other Details</label>
-        <length>32768</length>
+        <length>131072</length>
         <type>LongTextArea</type>
         <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>StackTraceString__c</fullName>
+        <encrypted>false</encrypted>
+        <externalId>false</externalId>
+        <isFilteringDisabled>false</isFilteringDisabled>
+        <isNameField>false</isNameField>
+        <isSortingDisabled>false</isSortingDisabled>
+        <label>Stacktrace</label>
+        <length>131072</length>
+        <type>LongTextArea</type>
+        <visibleLines>10</visibleLines>
     </fields>
     <label>ACMN Error Log</label>
     <pluralLabel>ACMN Error Logs</pluralLabel>

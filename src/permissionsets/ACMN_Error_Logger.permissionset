@@ -16,6 +16,11 @@
         <field>ACMN_Error_Log__c.Other_Details__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>ACMN_Error_Log__c.StackTraceString__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
     <label>ACMN Error Logger</label>
     <objectPermissions>

@@ -39,10 +39,21 @@ private class ACMN_Error_Logger_TESTS {
     @IsTest
     static void testEventLoggerEmptyMessage() {
         Test.startTest();
-        ACMN_Error_Logger.Log(null,'ACMN_Error_Logger_TESTS',null,null);
+        ACMN_Error_Logger.Log('');
         Test.stopTest();
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
-        System.assertEquals(0, logs.size());
+        System.assertEquals(0, logs.size(), 'No error logs should exist');
+    }
+
+    @IsTest
+    static void testACMNLoggerSObjectMethod() {
+        ACMN_LogRecord rec = new ACMN_LogRecord('error message');
+        Test.startTest();
+        ACMN_Error_Log__c recObj = rec.getSObject();
+        Test.stopTest();
+        System.assert(recObj.Error_Message__c.equals(rec.message));
+        System.assert(recObj.Log_Date_Time__c != null);
+
     }
 
     @IsTest
@@ -56,6 +67,15 @@ private class ACMN_Error_Logger_TESTS {
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
         System.assertEquals(1, logs.size());
         System.assertEquals('testEventLoggerSingleLogRecord', logs[0].Error_Message__c);
+    }
+    @IsTest
+    static void testEventLoggerMultipleLogRecords() {
+        Test.startTest();
+        List<String> messages = new List<String>{'err1', 'err2', 'err3'};
+        ACMN_Error_Logger.Log(messages);
+        Test.stopTest();
+        List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
+        System.assertEquals(3, logs.size(),'There should be 3 error logs saved');
     }
 
     @IsTest
@@ -88,6 +108,19 @@ private class ACMN_Error_Logger_TESTS {
         ACMN_Error_Logger.Log('Testing disabled logger');
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
         System.assertEquals(1, logs.size());
+    }
+
+    @IsTest
+    static void testLogRecordSorting(){
+        ACMN_LogRecord rec1 = new ACMN_LogRecord('should be last');
+        ACMN_LogRecord rec2 = new ACMN_LogRecord('rec2');
+        ACMN_LogRecord rec3 = new ACMN_LogRecord('should be first');
+        rec1.logDate = rec1.logDate.addDays(3);
+        rec3.logDate = rec3.logDate.addDays(-1);
+        List<ACMN_LogRecord> recs = new List<ACMN_LogRecord>{rec1,rec2,rec3};
+        recs.sort();
+        System.assertEquals(recs[0],rec3);
+        System.assertEquals(recs[2],rec1);
     }
 
     class CustomException extends Exception {
