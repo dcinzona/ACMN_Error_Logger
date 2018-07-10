@@ -4,5 +4,5 @@
 
 trigger ACMN_Error_Logger_PE_Trigger on ACMN_Error_Log_PE__e (after insert) {
     //Convert the Platform Event Notifications into Error Log Records for saving into the database
-    ACMN_Error_Logger.processPE(Trigger.new);
+    ACMN_Error_Logger.savePlatformEventsAsLogs(Trigger.new);
 }

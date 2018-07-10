@@ -7,17 +7,18 @@ private class ACMN_Error_Logger_TESTS {
 
     @IsTest
     static void testEventTrigger() {
+
+        Test.startTest();
         ACMN_Error_Log_PE__e pe = new ACMN_Error_Log_PE__e();
         pe.Error_Message__c = 'testEventTrigger';
         pe.Class_Name__c = 'ACMN_Error_Logger_TESTS';
         pe.Other_Details__c = 'Other Details';
         pe.Log_Date_Time__c = System.now();
-
-        Test.startTest();
         Database.SaveResult sr = EventBus.publish(pe);
         Test.stopTest();
 
         System.assertEquals(true, sr.isSuccess());
+        ACMN_Error_Logger.logger.processSaveResults(new List<Database.SaveResult>{sr});
         List<ACMN_Error_Log__c> logs = [SELECT Id FROM ACMN_Error_Log__c];
         System.assertEquals(1, logs.size());
     }
@@ -25,11 +26,7 @@ private class ACMN_Error_Logger_TESTS {
     @IsTest
     static void testEventLogger() {
         Test.startTest();
-        try{
-            throw new CustomException('manually generated exception message');
-        } catch (Exception ex){
-            ACMN_Error_Logger.Log(ex);
-        }
+        ACMN_Error_Logger.Log(new CustomException('manually generated exception message'));
         Test.stopTest();
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
         System.assertEquals(1, logs.size());
@@ -68,6 +65,7 @@ private class ACMN_Error_Logger_TESTS {
         System.assertEquals(1, logs.size());
         System.assertEquals('testEventLoggerSingleLogRecord', logs[0].Error_Message__c);
     }
+
     @IsTest
     static void testEventLoggerMultipleLogRecords() {
         Test.startTest();
@@ -86,7 +84,7 @@ private class ACMN_Error_Logger_TESTS {
         pe.Class_Name__c = 'ACMN_Error_Logger_TESTS';
         pe.Other_Details__c = 'Other Details';
         pe.Log_Date_Time__c = null;
-        ACMN_Error_Logger.processPE(new List<ACMN_Error_Log_PE__e>{pe});
+        ACMN_Error_Logger.savePlatformEventsAsLogs(new List<ACMN_Error_Log_PE__e>{pe});
         Test.stopTest();
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
         System.assertEquals(0, logs.size());
@@ -121,6 +119,41 @@ private class ACMN_Error_Logger_TESTS {
         recs.sort();
         System.assertEquals(recs[0],rec3);
         System.assertEquals(recs[2],rec1);
+    }
+
+    @IsTest
+    static void testLogRecordConstructors(){
+        String className = ACMN_Error_Logger_TESTS.class.getName();
+        ACMN_LogRecord rec1 = new ACMN_LogRecord('should be last');
+        ACMN_LogRecord rec2 = new ACMN_LogRecord('rec2', className, 'testing string message');
+        ACMN_LogRecord rec3 = new ACMN_LogRecord(new CustomException('test exception'));
+        ACMN_LogRecord rec4 = new ACMN_LogRecord(new CustomException('test exception'),className,'testing custom exception');
+        List<ACMN_LogRecord> recs = new List<ACMN_LogRecord>{rec1,rec2,rec3,rec4};
+        //message
+        System.assert(String.isNotEmpty(rec1.message));
+        System.assert(String.isNotEmpty(rec2.message));
+        System.assert(String.isNotEmpty(rec3.message));
+        System.assert(String.isNotEmpty(rec4.message));
+        //classname
+        System.assert(String.isEmpty(rec1.className));
+        System.assert(String.isNotEmpty(rec2.className));
+        System.assert(String.isEmpty(rec3.className));
+        System.assert(String.isNotEmpty(rec4.className));
+        //other details
+        System.assert(String.isEmpty(rec1.otherDetails));
+        System.assert(String.isNotEmpty(rec2.otherDetails));
+        System.assert(String.isNotEmpty(rec3.otherDetails));
+        System.assert(String.isNotEmpty(rec4.otherDetails));
+        //stacktrace
+        System.assert(String.isEmpty(rec1.stacktrace));
+        System.assert(String.isEmpty(rec2.stacktrace));
+        System.assert(String.isNotEmpty(rec3.stacktrace));
+        System.assert(String.isNotEmpty(rec4.stacktrace));
+
+        System.debug(rec3.stacktrace);
+        //exception type defaults
+        System.assertEquals(rec3.otherDetails,
+                ACMN_LogRecord.getOtherDetailsExceptionTypeString(new CustomException('t')));
     }
 
     class CustomException extends Exception {

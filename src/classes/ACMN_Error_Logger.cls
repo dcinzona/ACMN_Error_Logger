@@ -4,12 +4,13 @@
 
 public class ACMN_Error_Logger {
 
-    public static Boolean Enabled {get { return settings.Enabled; } set { settings.Enabled = value; }}
-    public static Boolean UsePE {get { return settings.UsePE; } set { settings.UsePE = value; }}
     @TestVisible
     static ACMN_Error_Logger.AppSettings settings = new ACMN_Error_Logger.AppSettings();
     @TestVisible
     static ACMN_Error_Logger.LoggerCore logger = new ACMN_Error_Logger.LoggerCore();
+
+    public static Boolean Enabled {get { return settings.Enabled; } set { settings.Enabled = value; }}
+    public static Boolean UsePE {get { return settings.UsePE; } set { settings.UsePE = value; }}
 
     public static void Log(String msg){
         Log(new ACMN_LogRecord(msg));
@@ -34,12 +35,13 @@ public class ACMN_Error_Logger {
     public static void Log(List<Exception> exceptions){
         logger.processRecords(logger.convertExceptions(exceptions));
     }
+
     public static void Log(List<ACMN_LogRecord> logs){
         logger.processRecords(logs);
     }
 
     // Processes the Platform Event notification from the Platform Event Trigger
-    public static void processPE(List<ACMN_Error_Log_PE__e> events){
+    public static void savePlatformEventsAsLogs(List<ACMN_Error_Log_PE__e> events){
         List<ACMN_Error_Log__c> records = new List<ACMN_Error_Log__c>();
         for(ACMN_Error_Log_PE__e pe : events){
             records.add(new ACMN_Error_Log__c(
@@ -69,7 +71,7 @@ public class ACMN_Error_Logger {
                     List<Database.SaveResult> sr = EventBus.publish(pes);
                     processSaveResults(sr);
                 } else {
-                    processPE(pes);
+                    savePlatformEventsAsLogs(pes);
                 }
             }
         }
@@ -89,6 +91,7 @@ public class ACMN_Error_Logger {
             }
         }
 
+        @TestVisible
         void processSaveResults(List<Database.SaveResult> srList){
             for(Database.SaveResult sr : srList){
                 if (sr.isSuccess()) {
@@ -106,7 +109,6 @@ public class ACMN_Error_Logger {
     }
 
 
-    @TestVisible
     public class AppSettings {
         public Boolean Enabled {get;set;}
         public Boolean UsePE {get;set;}
@@ -115,20 +117,16 @@ public class ACMN_Error_Logger {
             this.Enabled = true;
             this.UsePE = true;
             this.TrimAfterDays = 30;
-            try{
-                List<ACMN_Logger_Setting__mdt> logSettings = [SELECT
-                        Use_Platform_Events__c,
-                        Enabled__c,
-                        Days_To_Keep__c
-                        FROM ACMN_Logger_Setting__mdt
-                        WHERE Label = 'DEFAULT'];
-                if(logSettings.size() > 0){
-                    this.Enabled = logSettings[0].Enabled__c;
-                    this.UsePE = logSettings[0].Use_Platform_Events__c;
-                    this.TrimAfterDays = Integer.valueOf(logSettings[0].Days_To_Keep__c);
-                }
-            } catch ( Exception ex ){
-
+            List<ACMN_Logger_Setting__mdt> logSettings = [SELECT
+                    Use_Platform_Events__c,
+                    Enabled__c,
+                    Days_To_Keep__c
+                    FROM ACMN_Logger_Setting__mdt
+            ORDER BY Id DESC];
+            if(logSettings.size() > 0){
+                this.Enabled = logSettings[0].Enabled__c;
+                this.UsePE = logSettings[0].Use_Platform_Events__c;
+                this.TrimAfterDays = Integer.valueOf(logSettings[0].Days_To_Keep__c);
             }
         }
     }
