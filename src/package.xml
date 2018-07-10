@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>ACMN_Error_Logger</members>
@@ -60,7 +60,13 @@
     </types>
     <types>
         <members>ACMN_Error_Logger_PE_Trigger</members>
+        <members>ACMN_Error_Log__c</members>
         <name>SharingRules</name>
+    </types>
+    <types>
+        <members>ACMN_Error_Log_Reports</members>
+        <members>ACMN_Error_Log_Reports/New_ACMN_Error_Logs_Report</members>
+        <name>Report</name>
     </types>
     <version>43.0</version>
 </Package>

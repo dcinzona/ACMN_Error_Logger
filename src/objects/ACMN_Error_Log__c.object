@@ -114,7 +114,6 @@
     <listViews>
         <fullName>All</fullName>
         <columns>NAME</columns>
-        <columns>Class_Name__c</columns>
         <columns>Error_Message__c</columns>
         <columns>Log_Date_Time__c</columns>
         <columns>Other_Details__c</columns>
@@ -128,17 +127,13 @@
     </nameField>
     <pluralLabel>ACMN Error Logs</pluralLabel>
     <searchLayouts>
-        <customTabListAdditionalFields>Class_Name__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Error_Message__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Log_Date_Time__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Other_Details__c</customTabListAdditionalFields>
-        <lookupDialogsAdditionalFields>Class_Name__c</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>Error_Message__c</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>Log_Date_Time__c</lookupDialogsAdditionalFields>
         <searchFilterFields>NAME</searchFilterFields>
-        <searchFilterFields>Class_Name__c</searchFilterFields>
         <searchFilterFields>Log_Date_Time__c</searchFilterFields>
-        <searchResultsAdditionalFields>Class_Name__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Error_Message__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Log_Date_Time__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Other_Details__c</searchResultsAdditionalFields>
