@@ -36,7 +36,6 @@
     <types>
         <members>ACMN_Error_Log_PE__e</members>
         <members>ACMN_Error_Log__c</members>
-        <members>ACMN_Error_Logger_Settings__c</members>
         <members>ACMN_Logger_Setting__mdt</members>
         <name>CustomObject</name>
     </types>
