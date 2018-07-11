@@ -11,12 +11,14 @@ Simple Exception logging:
 
 More verbose example would use this method:
 
-`ACMN_Error_Logger.Log(String errorMessage, String ClassName, String OtherDetails, DateTime ErrorLogDateTime);`
-
-Example:
-`ACMN_Error_Logger.Log('Something is broken',null,null,null);`
+```
+ACMN_LogRecord rec = new ACMN_LogRecord(Exception ex, String className, String otherDetails);
+ACMN_Error_Logger.Log(new List<ACMN_LogRecord>{rec});
+```
 
 ### Updates
 
 * Added support for toggling logging on and off via Custom MetaData Types
 * Added generic method for logging a simple string message.  Use `ACMN_Error_Logger.Log('my error message')`
+* Added Report to display error logs
+* Better support for bulk error logging
