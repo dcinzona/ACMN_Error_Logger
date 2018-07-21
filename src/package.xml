@@ -4,6 +4,7 @@
         <members>ACMN_Error_Logger</members>
         <members>ACMN_LogRecord</members>
         <members>ACMN_Error_Logger_TESTS</members>
+        <members>ACMN_Logger_Service_PE</members>
         <name>ApexClass</name>
     </types>
     <types>

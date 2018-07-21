@@ -142,5 +142,12 @@
         <searchResultsAdditionalFields>Other_Details__c</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>Error_Message_Required</fullName>
+        <active>true</active>
+        <errorConditionFormula>ISBLANK( Error_Message__c )</errorConditionFormula>
+        <errorDisplayField>Error_Message__c</errorDisplayField>
+        <errorMessage>The Error Message required</errorMessage>
+    </validationRules>
     <visibility>Public</visibility>
 </CustomObject>

@@ -2,7 +2,7 @@
  * Created by gtandeciarz on 7/10/18.
  */
 
-public with sharing class ACMN_LogRecord implements Comparable{
+public class ACMN_LogRecord implements Comparable{
     public String message {get;set;}
     public String className {get;set;}
     public String otherDetails {get;set;}

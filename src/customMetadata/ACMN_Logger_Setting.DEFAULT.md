@@ -3,15 +3,15 @@
     <label>DEFAULT</label>
     <protected>true</protected>
     <values>
-        <field>Days_To_Keep__c</field>
-        <value xsi:type="xsd:double">30.0</value>
+        <field>Custom_Logger_Class__c</field>
+        <value xsi:type="xsd:string">ACMN_Logger_Service_PE</value>
     </values>
     <values>
         <field>Enabled__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
     <values>
-        <field>Use_Platform_Events__c</field>
+        <field>Save_To_Salesforce__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
 </CustomMetadata>

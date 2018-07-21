@@ -2,18 +2,18 @@
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <description>Settings to manage ACMN Logger</description>
     <fields>
-        <fullName>Days_To_Keep__c</fullName>
-        <defaultValue>30</defaultValue>
-        <description>Days to keep log files in the system.  Requires scheduling a batch job to truncate.</description>
+        <fullName>Custom_Logger_Class__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <description>Used to define a custom logger extension class.</description>
+        <encrypted>false</encrypted>
         <externalId>false</externalId>
         <fieldManageability>DeveloperControlled</fieldManageability>
-        <inlineHelpText>Days to keep log files in the system.  Requires scheduling a batch job to truncate.</inlineHelpText>
-        <label>Days To Keep</label>
-        <precision>3</precision>
-        <required>false</required>
-        <scale>0</scale>
-        <type>Number</type>
-        <unique>false</unique>
+        <inlineHelpText>Used to define a custom logger extension class.</inlineHelpText>
+        <label>Logger Service Class</label>
+        <length>255</length>
+        <required>true</required>
+        <type>Text</type>
+        <unique>true</unique>
     </fields>
     <fields>
         <fullName>Enabled__c</fullName>
@@ -25,12 +25,15 @@
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>Use_Platform_Events__c</fullName>
-        <defaultValue>true</defaultValue>
+        <fullName>Save_To_Salesforce__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Used to determine if this service will save the record to Salesforce by calling the ACMN_Error_Logger.saveToSalesforce method.  There should be only one active service saving to salesforce, otherwise you will get duplicate log records.</description>
         <externalId>false</externalId>
         <fieldManageability>SubscriberControlled</fieldManageability>
-        <inlineHelpText>Use Platform Events to write logs to the system.</inlineHelpText>
-        <label>Use Platform Events</label>
+        <inlineHelpText>Used to determine if this service will save the record to Salesforce by calling the ACMN_Error_Logger.saveToSalesforce method.  
+
+There should be only one active service saving to salesforce, otherwise you will get duplicate log records.</inlineHelpText>
+        <label>Save To Salesforce</label>
         <type>Checkbox</type>
     </fields>
     <label>ACMN Logger Setting</label>

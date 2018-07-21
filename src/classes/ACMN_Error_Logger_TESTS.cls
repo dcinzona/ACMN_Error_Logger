@@ -6,25 +6,8 @@
 private class ACMN_Error_Logger_TESTS {
 
     @IsTest
-    static void testEventTrigger() {
-
-        Test.startTest();
-        ACMN_Error_Log_PE__e pe = new ACMN_Error_Log_PE__e();
-        pe.Error_Message__c = 'testEventTrigger';
-        pe.Class_Name__c = 'ACMN_Error_Logger_TESTS';
-        pe.Other_Details__c = 'Other Details';
-        pe.Log_Date_Time__c = System.now();
-        Database.SaveResult sr = EventBus.publish(pe);
-        Test.stopTest();
-
-        System.assertEquals(true, sr.isSuccess());
-        ACMN_Error_Logger.logger.processSaveResults(new List<Database.SaveResult>{sr});
-        List<ACMN_Error_Log__c> logs = [SELECT Id FROM ACMN_Error_Log__c];
-        System.assertEquals(1, logs.size());
-    }
-
-    @IsTest
     static void testEventLogger() {
+        enableLogging();
         Test.startTest();
         ACMN_Error_Logger.Log(new CustomException('manually generated exception message'));
         Test.stopTest();
@@ -35,11 +18,47 @@ private class ACMN_Error_Logger_TESTS {
 
     @IsTest
     static void testEventLoggerEmptyMessage() {
+        enableLogging();
         Test.startTest();
         ACMN_Error_Logger.Log('');
         Test.stopTest();
-        List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
-        System.assertEquals(0, logs.size(), 'No error logs should exist');
+        assertNoRecords();
+    }
+
+    @IsTest
+    static void testGetSettingsMap() {
+        List<ACMN_Logger_Setting__mdt> settings = [SELECT Id
+                FROM ACMN_Logger_Setting__mdt
+                WHERE Enabled__c = TRUE];
+        System.assertEquals(settings.size(), ACMN_Error_Logger.servicesMap.size());
+    }
+
+    @IsTest
+    static void processSaveResultsFail(){
+        ACMN_Error_Log__c log = new ACMN_Error_Log__c();
+        ACMN_Error_Logger.processSaveResults(Database.insert(new List<ACMN_Error_Log__c>{log},false));
+        assertNoRecords();
+    }
+
+    @IsTest
+    static void testSendToServicesFail() {
+        enableLogging();
+        Test.startTest();
+        ACMN_Error_Logger.sendToServices(new List<String>{'bad data'});
+        Test.stopTest();
+        assertNoRecords();
+    }
+
+    @IsTest
+    static void testGetService() {
+        ACMN_Logger_Setting__mdt mdt = [SELECT Id, Custom_Logger_Class__c FROM ACMN_Logger_Setting__mdt WHERE DeveloperName = 'DEFAULT'];
+        System.assert(ACMN_Error_Logger.getServiceInstance(mdt) != null);
+    }
+
+    @IsTest
+    static void testGetServiceFail() {
+        ACMN_Logger_Setting__mdt badMDT = new ACMN_Logger_Setting__mdt();
+        System.assert(ACMN_Error_Logger.getServiceInstance(badMDT) == null);
     }
 
     @IsTest
@@ -50,62 +69,17 @@ private class ACMN_Error_Logger_TESTS {
         Test.stopTest();
         System.assert(recObj.Error_Message__c.equals(rec.message));
         System.assert(recObj.Log_Date_Time__c != null);
-
-    }
-
-    @IsTest
-    static void testEventLoggerSingleLogRecord() {
-        Test.startTest();
-        ACMN_Error_Log__c log = new ACMN_Error_Log__c();
-        log.Error_Message__c = 'testEventLoggerSingleLogRecord';
-        ACMN_Error_Logger.LoggerCore core = new ACMN_Error_Logger.LoggerCore();
-        core.saveLogs(new List<ACMN_Error_Log__c>{log});
-        Test.stopTest();
-        List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
-        System.assertEquals(1, logs.size());
-        System.assertEquals('testEventLoggerSingleLogRecord', logs[0].Error_Message__c);
     }
 
     @IsTest
     static void testEventLoggerMultipleLogRecords() {
+        enableLogging();
         Test.startTest();
         List<String> messages = new List<String>{'err1', 'err2', 'err3'};
         ACMN_Error_Logger.Log(messages);
         Test.stopTest();
         List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
         System.assertEquals(3, logs.size(),'There should be 3 error logs saved');
-    }
-
-    @IsTest
-    static void testEventLoggerPEPublishError() {
-        Test.startTest();
-        ACMN_Error_Log_PE__e pe = new ACMN_Error_Log_PE__e();
-        pe.Error_Message__c = 'Log Date Time is required and this should fail';
-        pe.Class_Name__c = 'ACMN_Error_Logger_TESTS';
-        pe.Other_Details__c = 'Other Details';
-        pe.Log_Date_Time__c = null;
-        ACMN_Error_Logger.savePlatformEventsAsLogs(new List<ACMN_Error_Log_PE__e>{pe});
-        Test.stopTest();
-        List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
-        System.assertEquals(0, logs.size());
-    }
-
-    @IsTest
-    static void testEventLoggerDisabled() {
-        ACMN_Error_Logger.settings.Enabled = false;
-        Test.startTest();
-        ACMN_Error_Logger.Log('Testing disabled logger');
-        Test.stopTest();
-        List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
-        System.assertEquals(0, logs.size());
-    }
-
-    @IsTest
-    static void testEventPEDisabled() {
-        ACMN_Error_Logger.settings.UsePE = false;
-        ACMN_Error_Logger.Log('Testing disabled logger');
-        List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
-        System.assertEquals(1, logs.size());
     }
 
     @IsTest
@@ -154,6 +128,20 @@ private class ACMN_Error_Logger_TESTS {
         //exception type defaults
         System.assertEquals(rec3.otherDetails,
                 ACMN_LogRecord.getOtherDetailsExceptionTypeString(new CustomException('t')));
+    }
+
+    static void assertNoRecords(){
+        List<ACMN_Error_Log__c> logs = [SELECT Id, Error_Message__c FROM ACMN_Error_Log__c];
+        System.assertEquals(0, logs.size(), 'No error logs should exist');
+    }
+
+    static void enableLogging(){
+        ACMN_Logger_Setting__mdt mdt = [SELECT Id, Custom_Logger_Class__c, Save_To_Salesforce__c, Enabled__c FROM ACMN_Logger_Setting__mdt WHERE Custom_Logger_Class__c='ACMN_Logger_Service_PE'];
+        ACMN_Error_Logger.Service svc = ACMN_Error_Logger.getServiceInstance(mdt);
+        svc.isEnabled = true;
+        svc.saveToSalesforce = true;
+        ACMN_Error_Logger.servicesCache = new Map<String, ACMN_Error_Logger.Service>();
+        ACMN_Error_Logger.servicesMap.put('ACMN_Logger_Service_PE', svc);
     }
 
     class CustomException extends Exception {
