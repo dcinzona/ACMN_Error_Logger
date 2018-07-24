@@ -25,4 +25,5 @@ ACMN_Error_Logger.Log(new List<ACMN_LogRecord>{rec});
 
 ### In Progress
 
-* Adding support for custom logging modules / plugins (these will be implementations of abstract classes)
+* Adding support for custom logging modules / plugins (these will be implementations of abstract classes).  Take a look at `ACMN_Logger_Service_PE.cls` as an example of how to implement your own logging service.
+  * Custom logging services must have a related `ACMN_Logger_Setting` Custom Metadata Type record.
