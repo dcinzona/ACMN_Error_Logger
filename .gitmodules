@@ -1,0 +1,3 @@
+[submodule "EMP-Connector"]
+	path = EMP-Connector
+	url = https://github.com/forcedotcom/EMP-Connector.git
