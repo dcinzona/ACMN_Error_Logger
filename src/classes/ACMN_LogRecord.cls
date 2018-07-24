@@ -47,7 +47,6 @@ public virtual class ACMN_LogRecord implements Comparable{
         this.otherDetails = otherDetails;
         this.stacktrace = stackTrace;
         this.logDate = dt == null ? System.now() : dt;
-        this.runningUserID = UserInfo.getUserId();
     }
 
     public ACMN_Error_Log__c getSObject(){

@@ -9,8 +9,6 @@ public class ACMN_Logger_Service_PE extends ACMN_Error_Logger.Service{
 
     //default usage publishes to the platform events message bus
     public override void processRecords( List<String> recordsAsJSON ) {
-        //If using the Custom Permission to toggle logging for individual users uncomment the following line
-        //if(!ACMN_Error_Logger.isLoggingEnabledForCurrentUser()){return;}
         List<ACMN_Error_Log_PE__e> pes = new List<ACMN_Error_Log_PE__e>();
         for(String record : recordsAsJSON){
             ACMN_LogRecord rec = (ACMN_LogRecord)JSON.deserialize(record, ACMN_LogRecord.class);
@@ -28,8 +26,6 @@ public class ACMN_Logger_Service_PE extends ACMN_Error_Logger.Service{
 
     //Used by the Platform Events trigger to save records to the Salesforce database
     public static void savePlatformEventsAsLogs(List<ACMN_Error_Log_PE__e> events){
-        //If using the Custom Permission to toggle logging for individual users uncomment the following line
-        //if(!ACMN_Error_Logger.isLoggingEnabledForCurrentUser()){return;}
         List<ACMN_Error_Log__c> records = new List<ACMN_Error_Log__c>();
         for(ACMN_Error_Log_PE__e pe : events){
             records.add(new ACMN_Error_Log__c(

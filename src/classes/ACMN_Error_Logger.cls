@@ -4,9 +4,12 @@
 
 public class ACMN_Error_Logger {
 
+    static String customPermissionAPIName = 'ACMN_Logging_Enabled';
+
     public abstract class Service {
         public Boolean isEnabled {get;set;}
         public Boolean saveToSalesforce{get;set;}
+        public Boolean useCustomPermissions{get;set;}
         public abstract void processRecords(List<String> recordsAsJSON);
     }
 
@@ -88,13 +91,18 @@ public class ACMN_Error_Logger {
                 for(ACMN_Logger_Setting__mdt mdt : [SELECT
                         Enabled__c,
                         Custom_Logger_Class__c,
-                        Save_To_Salesforce__c
+                        Save_To_Salesforce__c,
+                        Use_Custom_Permissions__c
                         FROM ACMN_Logger_Setting__mdt
                         WHERE Enabled__c = TRUE
                         ORDER BY Id DESC]){
 
-                    servicesCache.put(mdt.Custom_Logger_Class__c, getServiceInstance(mdt));
-
+                    //only cache the service for the current user context if it's enabled for the user
+                    Boolean cacheService = mdt.Use_Custom_Permissions__c ?
+                            FeatureManagement.checkPermission(customPermissionAPIName) : true;
+                    if(mdt.Enabled__c && cacheService){
+                        servicesCache.put(mdt.Custom_Logger_Class__c, getServiceInstance(mdt));
+                    }
                 }
             }
             return servicesCache;
@@ -121,14 +129,10 @@ public class ACMN_Error_Logger {
             svc = (ACMN_Error_Logger.Service)Type.forName(mdt.Custom_Logger_Class__c).newInstance();
             svc.isEnabled = mdt.Enabled__c;
             svc.saveToSalesforce = mdt.Save_To_Salesforce__c;
+            svc.useCustomPermissions = mdt.Use_Custom_Permissions__c;
         } catch (Exception ex){
             System.debug(ex.getMessage());
         }
         return svc;
-    }
-
-    public static Boolean isLoggingEnabledForCurrentUser(){
-        String customPermissionAPIName = 'ACMN_Logging_Enabled';
-        return FeatureManagement.checkPermission(customPermissionAPIName);
     }
 }
