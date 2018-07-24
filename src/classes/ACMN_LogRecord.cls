@@ -2,12 +2,21 @@
  * Created by gtandeciarz on 7/10/18.
  */
 
-public class ACMN_LogRecord implements Comparable{
+public virtual class ACMN_LogRecord implements Comparable{
     public String message {get;set;}
     public String className {get;set;}
     public String otherDetails {get;set;}
     public String stacktrace {get;set;}
     public DateTime logDate {get;set;}
+    String userIDString {get;private set;}
+    public String runningUserID { get{
+        if(String.isEmpty(userIDString)){
+            userIDString = UserInfo.getUserId();
+        }
+        return userIDString;
+    } set {
+        userIDString = value;
+    }}
 
     public ACMN_LogRecord(Exception ex){
         setVars(ex.getMessage(),null,getOtherDetailsExceptionTypeString(ex),ex.getStackTraceString(),null);
@@ -38,6 +47,7 @@ public class ACMN_LogRecord implements Comparable{
         this.otherDetails = otherDetails;
         this.stacktrace = stackTrace;
         this.logDate = dt == null ? System.now() : dt;
+        this.runningUserID = UserInfo.getUserId();
     }
 
     public ACMN_Error_Log__c getSObject(){
@@ -47,6 +57,7 @@ public class ACMN_LogRecord implements Comparable{
         log.Other_Details__c = this.otherDetails;
         log.StackTraceString__c = this.stacktrace;
         log.Log_Date_Time__c = this.logDate;
+        log.Running_User__c = this.runningUserID;
         return log;
     }
 
@@ -57,6 +68,7 @@ public class ACMN_LogRecord implements Comparable{
         log.Other_Details__c = this.otherDetails;
         log.StackTraceString__c = this.stacktrace;
         log.Log_Date_Time__c = this.logDate;
+        log.Running_User_ID__c = this.runningUserID;
         return log;
     }
 

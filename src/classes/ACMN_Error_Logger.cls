@@ -127,4 +127,8 @@ public class ACMN_Error_Logger {
         return svc;
     }
 
+    public static Boolean isLoggingEnabledForCurrentUser(){
+        String customPermissionAPIName = 'ACMN_Logging_Enabled';
+        return FeatureManagement.checkPermission(customPermissionAPIName);
+    }
 }

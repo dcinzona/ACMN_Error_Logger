@@ -52,6 +52,20 @@
         <visibleLines>3</visibleLines>
     </fields>
     <fields>
+        <fullName>Running_User_ID__c</fullName>
+        <description>Salesforce ID of the running user that triggered the error.</description>
+        <encrypted>false</encrypted>
+        <externalId>false</externalId>
+        <isFilteringDisabled>false</isFilteringDisabled>
+        <isNameField>false</isNameField>
+        <isSortingDisabled>false</isSortingDisabled>
+        <label>Running User ID</label>
+        <length>18</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>StackTraceString__c</fullName>
         <encrypted>false</encrypted>
         <externalId>false</externalId>

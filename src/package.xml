@@ -68,5 +68,9 @@
         <members>ACMN_Error_Log_Reports/New_ACMN_Error_Logs_Report</members>
         <name>Report</name>
     </types>
+    <types>
+        <members>ACMN_Logging_Enabled</members>
+        <name>CustomPermission</name>
+    </types>
     <version>43.0</version>
 </Package>

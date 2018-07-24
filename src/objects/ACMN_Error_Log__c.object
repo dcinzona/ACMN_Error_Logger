@@ -100,6 +100,19 @@
         <visibleLines>3</visibleLines>
     </fields>
     <fields>
+        <fullName>Running_User__c</fullName>
+        <description>Salesforce ID of the running user that triggered the error.</description>
+        <encrypted>false</encrypted>
+        <externalId>false</externalId>
+        <inlineHelpText>Salesforce ID of the running user that triggered the error.</inlineHelpText>
+        <label>Running User ID</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>StackTraceString__c</fullName>
         <description>Store stacktrace if error logger processed an exception.</description>
         <encrypted>false</encrypted>
