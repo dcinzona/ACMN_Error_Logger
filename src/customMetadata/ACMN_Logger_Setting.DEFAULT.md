@@ -14,4 +14,8 @@
         <field>Save_To_Salesforce__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
+    <values>
+        <field>Use_Custom_Permissions__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
 </CustomMetadata>

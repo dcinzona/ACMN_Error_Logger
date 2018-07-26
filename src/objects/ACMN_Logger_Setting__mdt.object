@@ -36,6 +36,16 @@ There should be only one active service saving to salesforce, otherwise you will
         <label>Save To Salesforce</label>
         <type>Checkbox</type>
     </fields>
+    <fields>
+        <fullName>Use_Custom_Permissions__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Used to define whether the service enforces the use of the Custom Permission ACMN_Logging_Enabled</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Check this box if you only want this service to log for users assigned the custom permission: ACMN_Logging_Enabled (either by profile or by permission set to users)</inlineHelpText>
+        <label>Use Custom Permissions</label>
+        <type>Checkbox</type>
+    </fields>
     <label>ACMN Logger Setting</label>
     <pluralLabel>ACMN Logger Settings</pluralLabel>
     <visibility>Public</visibility>

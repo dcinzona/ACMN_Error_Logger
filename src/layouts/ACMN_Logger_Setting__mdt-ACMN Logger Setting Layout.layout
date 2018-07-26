@@ -26,6 +26,10 @@
                 <behavior>Edit</behavior>
                 <field>Save_To_Salesforce__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Use_Custom_Permissions__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
