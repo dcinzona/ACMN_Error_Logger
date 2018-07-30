@@ -16,24 +16,36 @@
         <unique>true</unique>
     </fields>
     <fields>
+        <fullName>Custom_Permission_API_Name__c</fullName>
+        <description>The API name of the custom permission required for the service</description>
+        <encrypted>false</encrypted>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>The API name of the custom permission required for this service</inlineHelpText>
+        <label>Custom Permission API Name</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <description>Logging Service description</description>
+        <encrypted>false</encrypted>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>Describe your service</inlineHelpText>
+        <label>Description</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
         <fullName>Enabled__c</fullName>
         <defaultValue>true</defaultValue>
         <externalId>false</externalId>
         <fieldManageability>SubscriberControlled</fieldManageability>
         <inlineHelpText>Toggle the logging feature on or off</inlineHelpText>
         <label>Enabled</label>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Save_To_Salesforce__c</fullName>
-        <defaultValue>false</defaultValue>
-        <description>Used to determine if this service will save the record to Salesforce by calling the ACMN_Error_Logger.saveToSalesforce method.  There should be only one active service saving to salesforce, otherwise you will get duplicate log records.</description>
-        <externalId>false</externalId>
-        <fieldManageability>SubscriberControlled</fieldManageability>
-        <inlineHelpText>Used to determine if this service will save the record to Salesforce by calling the ACMN_Error_Logger.saveToSalesforce method.  
-
-There should be only one active service saving to salesforce, otherwise you will get duplicate log records.</inlineHelpText>
-        <label>Save To Salesforce</label>
         <type>Checkbox</type>
     </fields>
     <fields>

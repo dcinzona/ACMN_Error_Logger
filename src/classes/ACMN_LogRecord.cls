@@ -7,7 +7,7 @@ public virtual class ACMN_LogRecord implements Comparable{
     public String className {get;set;}
     public String otherDetails {get;set;}
     public String stacktrace {get;set;}
-    public DateTime logDate {get;set;}
+    public Datetime logDate {get;set;}
     String userIDString {get;private set;}
     public String runningUserID { get{
         if(String.isEmpty(userIDString)){

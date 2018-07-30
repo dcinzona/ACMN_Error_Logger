@@ -5,6 +5,8 @@
         <members>ACMN_LogRecord</members>
         <members>ACMN_Error_Logger_TESTS</members>
         <members>ACMN_Logger_Service_PE</members>
+        <members>ACMN_Logger_MDT_DAO</members>
+        <members>ACMN_Logger_MDT_DAO_TESTS</members>
         <name>ApexClass</name>
     </types>
     <types>
