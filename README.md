@@ -34,6 +34,12 @@ global abstract class ACMN_Logger_Service {
 }
 ```
 
+Once this is done, you need to create a new Custom Metadata Type `ACMN_Logger_Setting` record where you define the following:
+
+* Logger Service Class (API Name)
+* Use Custom Permissions (Boolean)
+* Custom Permission API Name (if `Use Custom Permissions` is checked)
+
 ### Updates
 
 * Added support for toggling logging on and off via Custom MetaData Types
