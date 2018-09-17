@@ -15,25 +15,6 @@
         <name>ApexTrigger</name>
     </types>
     <types>
-        <members>ACMN_Error_Log_PE__e.Class_Name__c</members>
-        <members>ACMN_Error_Log_PE__e.Error_Message__c</members>
-        <members>ACMN_Error_Log_PE__e.Log_Date_Time__c</members>
-        <members>ACMN_Error_Log_PE__e.Other_Details__c</members>
-        <members>ACMN_Error_Log_PE__e.StackTraceString__c</members>
-        <members>ACMN_Error_Log__c.Class_Name__c</members>
-        <members>ACMN_Error_Log__c.Error_Message__c</members>
-        <members>ACMN_Error_Log__c.Log_Date_Time__c</members>
-        <members>ACMN_Error_Log__c.Other_Details__c</members>
-        <members>ACMN_Error_Log__c.StackTraceString__c</members>
-        <members>ACMN_Error_Logger_Settings__c.Enabled__c</members>
-        <members>ACMN_Error_Logger_Settings__c.Truncate_Days__c</members>
-        <members>ACMN_Error_Logger_Settings__c.Use_Platform_Events__c</members>
-        <members>ACMN_Logger_Setting__mdt.Days_To_Keep__c</members>
-        <members>ACMN_Logger_Setting__mdt.Enabled__c</members>
-        <members>ACMN_Logger_Setting__mdt.Use_Platform_Events__c</members>
-        <name>CustomField</name>
-    </types>
-    <types>
         <members>ACMN_Logger_Setting.DEFAULT</members>
         <name>CustomMetadata</name>
     </types>
