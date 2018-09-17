@@ -8,6 +8,8 @@ Settings are managed via Custom Metadata Types.  By default, logging is turned o
 ### Enabling for users
 For logging to be enabled, the users must be added to the permission set `ACMN_Error_Logger`.  This permission set gives the user the ability to create the specific platform event records used by the default implementation.
 
+If the permission set is not assigned to a user, `System.debug` will still log the message.  No need to have separate debug and logging statements.
+
 ### Logging in Apex
 Simple Exception logging:
 * `ACMN_Error_Logger.Log(Exception ex);`
