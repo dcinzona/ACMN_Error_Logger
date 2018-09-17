@@ -11,7 +11,7 @@ Settings are managed via Custom Metadata Types.  By default, logging is turned o
 </a>
 
 ### Enabling for users
-For logging to be enabled, the users must be added to the permission set `ACMN_Error_Logger`.  This permission set gives the user the ability to create the specific platform event records used by the default implementation.
+For logging to be enabled, the users must be added to the permission set `ACMN Logging Enabled`.  This permission set gives the user the ability to create the specific platform event records used by the default implementation.
 
 If the permission set is not assigned to a user, `System.debug` will still log the message.  No need to have separate debug and logging statements.
 
@@ -20,11 +20,24 @@ Simple Exception logging:
 * `ACMN_Error_Logger.Log(Exception ex);`
 * `ACMN_Error_Logger.Log('my error message')`
 
-More verbose example would use this method:
+Simple example in context (You can run this using anonymous apex):
 
 ```
-ACMN_LogRecord rec = new ACMN_LogRecord(Exception ex, String className, String otherDetails);
-ACMN_Error_Logger.Log(new List<ACMN_LogRecord>{rec});
+try{
+    insert new Account(); // this will fail
+} catch(Exception ex){
+    ACMN_Error_Logger.Log(ex);
+}
+```
+
+A more verbose example includes support for bulk logging and custom error log field values:
+```
+try{
+    insert new Account(); // this will fail
+} catch(Exception ex){
+    ACMN_LogRecord rec = new ACMN_LogRecord(ex, 'anon apex', 'ran this in dev console');
+    ACMN_Error_Logger.Log(new List<ACMN_LogRecord>{rec});
+}
 ```
 
 ### Logging elsewhere
