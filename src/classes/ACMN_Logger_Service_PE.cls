@@ -39,6 +39,5 @@ public class ACMN_Logger_Service_PE extends ACMN_Error_Logger.Service{
         }
 
         ACMN_Error_Logger.processSaveResults(Database.insert(records,false));
-        //ACMN_Error_Logger.saveToSalesforce(records, 'ACMN_Logger_Service_PE');
     }
 }

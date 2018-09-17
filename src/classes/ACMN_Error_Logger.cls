@@ -70,32 +70,11 @@ public class ACMN_Error_Logger {
         }
     }
 
-    //Calling callingClass is required.  Queries the custom metadata type to check if records should be saved to Salesforce.
-    //CallingClass should be the name of your service class
-    /*
-    public static void saveToSalesforce(List<ACMN_Error_Log__c> records, String callingClass){
-        if(!String.isEmpty(callingClass)){
-            System.debug('**** saveToSalesforce: callingClass: ' + callingClass);
-            Boolean shouldSave = servicesMap.containsKey(callingClass) &&
-                    servicesMap.get(callingClass).saveToSalesforce == true &&
-                    records.size() > 0 &&
-                    Schema.SObjectType.ACMN_Error_Log__c.isCreateable();
-            if(shouldSave) {
-                ACMN_Error_Logger.processSaveResults(Database.insert(records,false));
-            }
-        }
-    }
-    */
-
     public static Map<String, ACMN_Error_Logger.Service> servicesMap {
         get {
             if(servicesCache == null){
                 servicesCache = new Map<String, ACMN_Error_Logger.Service>();
                 for(ACMN_Logger_Setting__mdt mdt : ACMN_Logger_MDT_DAO.getCustomMetadataRecords()){
-                    //only cache the service for the current user context if it's enabled for the user
-                    //if(mdt.Enabled__c && checkPermissionsForService(mdt)){
-                        //servicesCache.put(mdt.Custom_Logger_Class__c, getServiceInstance(mdt));
-                    //}
                     servicesCache.put(mdt.Custom_Logger_Class__c, getServiceInstance(mdt));
                 }
             }

@@ -61,11 +61,6 @@
         <name>PermissionSet</name>
     </types>
     <types>
-        <members>ACMN_Error_Logger_PE_Trigger</members>
-        <members>ACMN_Error_Log__c</members>
-        <name>SharingRules</name>
-    </types>
-    <types>
         <members>ACMN_Error_Log_Reports</members>
         <members>ACMN_Error_Log_Reports/New_ACMN_Error_Logs_Report</members>
         <name>Report</name>
