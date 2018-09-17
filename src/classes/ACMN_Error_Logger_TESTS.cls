@@ -161,8 +161,8 @@ private class ACMN_Error_Logger_TESTS {
 
     static void setService(Boolean enabled){
         ACMN_Logger_Setting__mdt mdt = getMDTFromJSON(enabled);
-        ACMN_Error_Logger.Service svc = ACMN_Error_Logger.getServiceInstance(mdt);
-        ACMN_Error_Logger.servicesCache = new Map<String, ACMN_Error_Logger.Service>();
+        ACMN_Logger_Service svc = ACMN_Error_Logger.getServiceInstance(mdt);
+        ACMN_Error_Logger.servicesCache = new Map<String, ACMN_Logger_Service>();
         ACMN_Error_Logger.servicesMap.put(PE_SERVICE_API_NAME, svc);
     }
 

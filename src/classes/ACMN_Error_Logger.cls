@@ -2,24 +2,16 @@
  * Created by gtandeciarz on 6/21/18.
  */
 
-public class ACMN_Error_Logger {
+global class ACMN_Error_Logger {
 
     @TestVisible
     static final String DEFAULT_CUSTOM_PERMISSION_API_NAME = 'ACMN_Logging_Enabled';
 
-    public abstract class Service {
-        //public Boolean isEnabled {get;set;}
-        //public Boolean saveToSalesforce{get;set;}
-        //public Boolean useCustomPermissions{get;set;}
-        public ACMN_Logger_Setting__mdt settingsMDT {get; set;}
-        public abstract void processRecords(List<String> recordsAsJSON);
-    }
-
-    public static void Log(String msg){
+    global static void Log(String msg){
         Log(new ACMN_LogRecord(msg));
     }
 
-    public static void Log(List<String> messages){
+    global static void Log(List<String> messages){
         List<ACMN_LogRecord> recs = new List<ACMN_LogRecord>();
         for(String msg : messages){
             recs.add(new ACMN_LogRecord(msg));
@@ -27,7 +19,7 @@ public class ACMN_Error_Logger {
         Log(recs);
     }
 
-    public static void Log(System.Exception ex){
+    global static void Log(System.Exception ex){
         Log(new List<Exception>{ex});
     }
 
@@ -35,7 +27,7 @@ public class ACMN_Error_Logger {
         Log(new List<ACMN_LogRecord>{rec});
     }
 
-    public static void Log(List<Exception> exceptions){
+    global static void Log(List<Exception> exceptions){
         List<ACMN_LogRecord> recs = new List<ACMN_LogRecord>();
         for(Exception ex : exceptions){
             recs.add(new ACMN_LogRecord(ex));
@@ -55,7 +47,7 @@ public class ACMN_Error_Logger {
         sendToServices(logsAsJSON);
     }
 
-    public static void processSaveResults(List<Database.SaveResult> srList){
+    global static void processSaveResults(List<Database.SaveResult> srList){
         for(Database.SaveResult sr : srList){
             if (sr.isSuccess()) {
                 System.debug('Successfully published error log event: ' + sr.getId());
@@ -70,10 +62,10 @@ public class ACMN_Error_Logger {
         }
     }
 
-    public static Map<String, ACMN_Error_Logger.Service> servicesMap {
+    public static Map<String, ACMN_Logger_Service> servicesMap {
         get {
             if(servicesCache == null){
-                servicesCache = new Map<String, ACMN_Error_Logger.Service>();
+                servicesCache = new Map<String, ACMN_Logger_Service>();
                 for(ACMN_Logger_Setting__mdt mdt : ACMN_Logger_MDT_DAO.getCustomMetadataRecords()){
                     servicesCache.put(mdt.Custom_Logger_Class__c, getServiceInstance(mdt));
                 }
@@ -83,12 +75,12 @@ public class ACMN_Error_Logger {
     }
 
     @TestVisible
-    static Map<String, ACMN_Error_Logger.Service> servicesCache {get;set;}
+    static Map<String, ACMN_Logger_Service> servicesCache {get;set;}
 
     @TestVisible
     static void sendToServices(List<String> logs){
         try{
-            for(ACMN_Error_Logger.Service svc : servicesMap.values()){
+            for(ACMN_Logger_Service svc : servicesMap.values()){
                 if(svc != null && svc.settingsMDT.Enabled__c && checkPermissionsForService(svc.settingsMDT)){
                     svc.processRecords( logs );
                 }
@@ -124,10 +116,10 @@ public class ACMN_Error_Logger {
     } }
 
     @TestVisible
-    static ACMN_Error_Logger.Service getServiceInstance(ACMN_Logger_Setting__mdt mdt){
-        ACMN_Error_Logger.Service svc;
+    static ACMN_Logger_Service getServiceInstance(ACMN_Logger_Setting__mdt mdt){
+        ACMN_Logger_Service svc;
         try {
-            svc = (ACMN_Error_Logger.Service)Type.forName(mdt.Custom_Logger_Class__c).newInstance();
+            svc = (ACMN_Logger_Service)Type.forName(mdt.Custom_Logger_Class__c).newInstance();
             svc.settingsMDT = mdt;
         } catch (Exception ex){
             System.debug(ex.getMessage());

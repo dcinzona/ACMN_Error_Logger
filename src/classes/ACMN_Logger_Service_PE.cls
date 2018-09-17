@@ -5,7 +5,7 @@
  * Create your own services and bind them via the Custom Metadata Type record
  */
 
-public class ACMN_Logger_Service_PE extends ACMN_Error_Logger.Service{
+public class ACMN_Logger_Service_PE extends ACMN_Logger_Service{
 
     //default usage publishes to the platform events message bus
     public override void processRecords( List<String> recordsAsJSON ) {

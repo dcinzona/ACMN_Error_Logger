@@ -25,6 +25,15 @@ ACMN_Error_Logger.Log(new List<ACMN_LogRecord>{rec});
 ### Logging elsewhere
 The beauty of using platform events is that you can create one from a flow or an external system.  You can also write your own plugins using the plugin service class and Custom Metadata Type to implement your own logic.
 
+### Custom Services
+You can build your own custom logging services instead of using Platform Events and the default logic.  Take a look at `ACMN_Logged_Service_PE.cls` for an example of how to implement your own.  Basically, you must create a custom class that extends the `ACMN_Logger_Service` class.
+
+```java
+global abstract class ACMN_Logger_Service {
+    global abstract void processRecords(List<String> recordsAsJSON);
+}
+```
+
 ### Updates
 
 * Added support for toggling logging on and off via Custom MetaData Types
