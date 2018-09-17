@@ -5,6 +5,11 @@ Includes support for Platform Events as well as passing in an exception directly
 
 Settings are managed via Custom Metadata Types.  By default, logging is turned off.
 
+<a href="https://githubsfdeploy.herokuapp.com?owner=dcinzona&repo=ACMN_Error_Logger">
+  <img alt="Deploy to Salesforce"
+       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
+</a>
+
 ### Enabling for users
 For logging to be enabled, the users must be added to the permission set `ACMN_Error_Logger`.  This permission set gives the user the ability to create the specific platform event records used by the default implementation.
 
