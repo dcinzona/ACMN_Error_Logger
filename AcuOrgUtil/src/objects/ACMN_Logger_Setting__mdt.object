@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Settings to manage ACMN Logger</description>
+    <fields>
+        <fullName>Custom_Logger_Class__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <description>Used to define a custom logger extension class.</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>Used to define a custom logger extension class.</inlineHelpText>
+        <label>Logger Service Class</label>
+        <length>255</length>
+        <required>true</required>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Custom_Permission_API_Name__c</fullName>
+        <description>The API name of the custom permission required for the service</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>The API name of the custom permission required for this service</inlineHelpText>
+        <label>Custom Permission API Name</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <description>Logging Service description</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>Describe your service</inlineHelpText>
+        <label>Description</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Enabled__c</fullName>
+        <defaultValue>true</defaultValue>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Toggle the logging feature on or off</inlineHelpText>
+        <label>Enabled</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Use_Custom_Permissions__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Used to define whether the service enforces the use of the Custom Permission ACMN_Logging_Enabled</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Check this box if you only want this service to log for users assigned the custom permission: ACMN_Logging_Enabled (either by profile or by permission set to users)</inlineHelpText>
+        <label>Use Custom Permissions</label>
+        <type>Checkbox</type>
+    </fields>
+    <label>ACMN Logger Setting</label>
+    <pluralLabel>ACMN Logger Settings</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>
