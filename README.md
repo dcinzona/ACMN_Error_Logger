@@ -3,8 +3,12 @@
 Used to write to a custom object for error logging outside of debug.  
 Includes support for Platform Events as well as passing in an exception directly into the static helper class.
 
-Settings are managed via Custom Metadata Types.  By default, logging is turned on.
+Settings are managed via Custom Metadata Types.  By default, logging is turned off.
 
+### Enabling for users
+For logging to be enabled, the users must be added to the permission set `ACMN_Error_Logger`.  This permission set gives the user the ability to create the specific platform event records used by the default implementation.
+
+### Logging in Apex
 Simple Exception logging:
 * `ACMN_Error_Logger.Log(Exception ex);`
 * `ACMN_Error_Logger.Log('my error message')`
@@ -15,6 +19,9 @@ More verbose example would use this method:
 ACMN_LogRecord rec = new ACMN_LogRecord(Exception ex, String className, String otherDetails);
 ACMN_Error_Logger.Log(new List<ACMN_LogRecord>{rec});
 ```
+
+### Logging elsewhere
+The beauty of using platform events is that you can create one from a flow or an external system.  You can also write your own plugins using the plugin service class and Custom Metadata Type to implement your own logic.
 
 ### Updates
 
