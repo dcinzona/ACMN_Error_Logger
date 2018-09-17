@@ -1,4 +1,4 @@
-# Acumen Error Logger Utility
+# Salesforce Error Logger Utility
 
 Used to write to a custom object for error logging outside of debug.  
 Includes support for Platform Events as well as passing in an exception directly into the static helper class.
