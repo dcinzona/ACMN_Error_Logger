@@ -7,7 +7,7 @@ Settings are managed via Custom Metadata Types.  By default, logging is turned o
 
 <a target="_blank" href="https://githubsfdeploy.herokuapp.com?owner=dcinzona&repo=ACMN_Error_Logger&ref=v1.0">
   <img alt="Deploy to Salesforce"
-       src="https://camo.githubusercontent.com/9edf80918d1d3b365e5ae6971302f767e7ed3dd4/68747470733a2f2f6465706c6f792d746f2d736664782e636f6d2f646973742f6173736574732f696d616765732f4465706c6f79546f534644582e737667">
+       src="https://github.com/dcinzona/ACMN_Error_Logger/blob/master/images/deploy.png?raw=true">
 </a>
 
 ### Enabling for users
