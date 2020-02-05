@@ -104,14 +104,16 @@ global class ACMN_Error_Logger {
     static Boolean hasPermissions { get {
         Map<Id,CustomPermission> customPermissionNamesById = new Map<Id, CustomPermission>( [SELECT Id, DeveloperName
                 FROM CustomPermission WHERE DeveloperName=: DEFAULT_CUSTOM_PERMISSION_API_NAME] );
-
+        List<Id> assigneeIds = new List<Id>{UserInfo.getUserId(), UserInfo.getProfileId()};
         List<SetupEntityAccess> setupEntities =
         [SELECT SetupEntityId
                 FROM SetupEntityAccess
                 WHERE SetupEntityId IN :customPermissionNamesById.keySet() AND
                         ParentId IN (SELECT PermissionSetId
                                 FROM PermissionSetAssignment
-                                WHERE AssigneeId = :UserInfo.getUserId())];
+                                WHERE AssigneeId in :assigneeIds
+                                    )
+        ];
         return setupEntities.size() > 0;
     } }
 

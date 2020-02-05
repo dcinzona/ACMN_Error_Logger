@@ -224,14 +224,32 @@ private class ACMN_Error_Logger_TESTS {
     }
 
     static void removeLoggingPermissionSet(){
-        List<PermissionSetAssignment> psa = [SELECT Id FROM PermissionSetAssignment
-                WHERE AssigneeId=: UserInfo.getUserId()
-                        AND PermissionSetId IN (SELECT Id FROM PermissionSet WHERE Name = 'ACMN_Error_Logger')];
-        delete psa;
-        psa = [SELECT Id FROM PermissionSetAssignment
-                WHERE AssigneeId=: UserInfo.getUserId()
-                        AND PermissionSetId IN (SELECT Id FROM PermissionSet WHERE Name = 'ACMN_Error_Logger')];
-        System.assertEquals(0,psa.size());
+        List<Id> assigneeIds = new List<Id>{UserInfo.getUserId(), UserInfo.getProfileId()};
+
+        Map<Id,CustomPermission> customPermissionNamesById = new Map<Id, CustomPermission>( [SELECT Id, DeveloperName
+                FROM CustomPermission WHERE DeveloperName=: ACMN_Error_Logger.DEFAULT_CUSTOM_PERMISSION_API_NAME] );
+
+        List<SetupEntityAccess> setupEntities =
+        [SELECT SetupEntityId
+                FROM SetupEntityAccess
+                WHERE SetupEntityId IN :customPermissionNamesById.keySet() AND
+                        ParentId IN (SELECT PermissionSetId
+                                FROM PermissionSetAssignment
+                                WHERE AssigneeId in :assigneeIds
+                                    )
+        ];
+        delete setupEntities;
+
+       	setupEntities =
+        [SELECT SetupEntityId
+                FROM SetupEntityAccess
+                WHERE SetupEntityId IN :customPermissionNamesById.keySet() AND
+                        ParentId IN (SELECT PermissionSetId
+                                FROM PermissionSetAssignment
+                                WHERE AssigneeId in :assigneeIds
+                                    )
+        ];
+        System.assertEquals(0,setupEntities.size());
         System.assert(ACMN_Error_Logger.hasPermissions == false);
     }
 
